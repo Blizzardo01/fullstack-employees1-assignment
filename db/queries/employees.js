@@ -1,14 +1,20 @@
 /** @returns the employee created according to the provided details */
 
+
 import client from "../client.js";
 
 export async function createEmployee({ name, birthday, salary }) {
   const SQL = `
     INSERT INTO employees (name, birthday, salary)
-    VALUES ($1, $2, $3);
+    VALUES ($1, $2, $3)
+    RETURNING *;
   `;
-  await client.query(SQL, [name, birthday, salary]);
+
+  const { rows } = await client.query(SQL, [name, birthday, salary]);
+
+  return rows[0];
 }
+
 
 // === Part 2 ===
 
@@ -42,14 +48,17 @@ export async function updateEmployee({ id, name, birthday, salary }) {
   const SQL = `
     UPDATE employees
     SET name = $2,
-    birthday = $3,
-    salary = $4,
+        birthday = $3,
+        salary = $4
     WHERE id = $1
     RETURNING *;
   `;
-  const {rows} = await client.query(SQL, [id, name, birthday, salary]);
+
+  const { rows } = await client.query(SQL, [id, name, birthday, salary]);
+
   return rows[0];
 }
+
 
  /**
   * @returns the deleted employee with the given id

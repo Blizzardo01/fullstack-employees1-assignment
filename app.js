@@ -3,14 +3,16 @@ import express from "express";
 const app = express();
 export default app;
 
+//parsing middleware
+app.use(express.json());
+
 
 //employees router
-app.use(router, "/employees")
+app.use("/employees", router)
 
 //logging middleware
 
-//parsing middleware
-app.use(express.json());
+
 
 //error handling middleware
 
